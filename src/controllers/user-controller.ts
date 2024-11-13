@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
+import nodemailer from "nodemailer";
 import { Advertisement } from "../models/ad-model.js";
 import { Message } from "../models/message-model.js";
 import { Token } from "../models/token-model.js";
@@ -8,6 +9,7 @@ import { User } from "../models/user-model.js";
 import { Request, Response, NextFunction } from "express";
 import { TokenController } from "./token-controller.js";
 
+const PORT = process.env.PORT || 3000;
 const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 
 export class UserController {
@@ -51,7 +53,7 @@ export class UserController {
 
       const existingUser = await User.findOne({ where: { email } });
       if (existingUser) {
-        return res.status(400).send("User already exists");
+        return res.status(400).send("Користувач з таким email вже зареєстровано");
       }
 
       const salt = bcrypt.genSaltSync(10);
@@ -80,10 +82,10 @@ export class UserController {
       console.log(req.body);
       const user = await User.findOne({ where: { email } });
 
-      if (!user) return res.status(400).json({ message: "No user was found with this email" });
+      if (!user) return res.status(400).json({ message: "Юзера з таким email не знайдено" });
 
       const passwordMatch = await bcrypt.compare(password, user.password);
-      if (!passwordMatch) return res.status(400).json({ message: "Invalid password" });
+      if (!passwordMatch) return res.status(400).json({ message: "Неправильний пароль" });
       res.locals.user = user.login;
 
       await TokenController.generateToken(user, res);
@@ -98,6 +100,69 @@ export class UserController {
   static async logout(req: Request, res: Response) {
     res.clearCookie('access_token');
     res.redirect('/');
+  }
+
+  static async sendResetEmail(req: Request, res: Response): Promise<any>  {
+    const { email } = req.body;
+    
+    const user = await User.findOne({ where: { email } });
+    if (!user) {
+      return res.status(404).send('Користувача з таким email не знайдено.');
+    }
+
+    const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+
+    const resetToken = (await TokenController.generatePasswordResetToken(email)).toString();
+    const resetLink = `http://localhost:${PORT}/user/password-reset?token=${resetToken}`;
+    
+    const mailOptions = {
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: "Password Reset",
+      text: `Перейдіть за цим посиланням, щоб відновити пароль: ${resetLink}`
+    };
+
+    await transporter.sendMail(mailOptions);
+    res.status(200).send('Посилання для відновлення пароля надіслано на вашу пошту.');
+  }
+
+  static async resetPassword(req: Request, res: Response): Promise<any> {
+    try {
+      const { token } = req.query;
+      const { password, confirm_password} = req.body;
+      if (!validator.isLength(password, { min: 6 })) {
+        return res.status(400).send("Пароль повинен містити мініму 6 символів");
+      }
+      if(password !== confirm_password ){
+        return res.status(400).send("Паролі не співпадають");      
+      }
+
+      const decoded = jwt.verify(token as string, JWT_SECRET) as { email: string };
+      const email = decoded.email;
+
+      const user = await User.findOne({ where: { email } });
+      if (!user) {
+        return res.status(404).send('Користувача не знайдено.');
+      }
+
+      const salt = bcrypt.genSaltSync(10);
+      const hash = await bcrypt.hash(password, salt);
+      
+      await User.update({  
+        password: hash
+      }, {  where: { email: email } }
+    );
+
+      res.status(200).redirect("/user/login");
+    } catch (error) {
+      res.status(400).send('Токен недійсний або закінчився.');
+    }
   }
 }
 

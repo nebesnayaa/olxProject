@@ -71,4 +71,11 @@ export class TokenController {
       console.error('Error updating/creating refresh token:', error);
     }
   }
+
+  static async generatePasswordResetToken (email: string)  {
+    const payload = { email };
+    const resetToken = jwt.sign(payload, JWT_SECRET, { expiresIn: '15m' });
+    return resetToken;
+  }
+
 }
