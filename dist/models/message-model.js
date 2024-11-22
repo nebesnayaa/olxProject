@@ -6,7 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 import { Table, Model, Column, ForeignKey, BelongsTo, DataType } from "sequelize-typescript";
 import { User } from "./user-model.js";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 let Message = class Message extends Model {
 };
 __decorate([
@@ -24,8 +24,9 @@ __decorate([
 ], Message.prototype, "content", void 0);
 __decorate([
     Column({
-        type: DataType.TIME,
-        allowNull: false
+        type: DataType.DATE,
+        allowNull: false,
+        defaultValue: DataType.NOW
     })
 ], Message.prototype, "timestamp", void 0);
 __decorate([

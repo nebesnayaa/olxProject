@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { Table, Model, Column, DataType, HasMany, HasOne } from "sequelize-typescript";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 import { Token } from "./token-model.js";
 import { Message } from "./message-model.js";
 var UserRole;

@@ -1,5 +1,5 @@
 import { Table, Model, Column, DataType, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 
 @Table ({
   tableName: "categories",
@@ -23,13 +23,16 @@ export class Category extends Model{
   @ForeignKey(() => Category)
   @Column({
     type: DataType.INTEGER,
-    allowNull: false
+    allowNull: true,
   })
   parent_id!: number;
 
-  @BelongsTo(() => Category)
-  category!: Category
+  @BelongsTo(() => Category, { as: "parentCategory", foreignKey: "parent_id" })
+  parentCategory!: Category;
 
-  @HasMany(()=>Advertisement)
-  advertisements!: Advertisement[];
+  @HasMany(() => Category, { as: "subcategories", foreignKey: "parent_id" })
+  subcategories!: Category[];
+
+  @HasMany(()=> Advertisement)
+  advertisements!: Advertisement[];   
 }

@@ -39,13 +39,15 @@ export class Advertisement extends Model{
 
   @Column({
     type: DataType.BOOLEAN,
-    allowNull: false
+    allowNull: false,
+    defaultValue: true,
   })
   status!: boolean;
 
   @Column({
     type: DataType.DECIMAL,
-    allowNull: false
+    allowNull: false,
+    defaultValue: 0,
   })
   views!: number;
 
@@ -63,7 +65,7 @@ export class Advertisement extends Model{
   @Column({
     type: DataType.INTEGER,
     allowNull: false
-  })
+  }) 
   category_id!: number;
 
   @BelongsTo(() => Category)

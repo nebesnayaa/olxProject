@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import validator from "validator";
 import nodemailer from "nodemailer";
-import { Advertisement } from "../models/ad-model.js";
+import { Advertisement } from "../models/advert-model.js";
 import { Message } from "../models/message-model.js";
 import { Token } from "../models/token-model.js";
 import { User } from "../models/user-model.js";
@@ -26,7 +26,7 @@ export class UserController {
         if (users) {
             return res.status(200).json({ message: "List of users", data: users });
         }
-        return res.status(500).json({ message: "Db Error", data: null });
+        return res.status(500).json({ message: "Помилка отримання корстувачів", data: null });
     }
     static async register(req, res) {
         try {
@@ -136,6 +136,57 @@ export class UserController {
         }
         catch (error) {
             res.status(400).send('Токен недійсний або закінчився.');
+        }
+    }
+    static async readById(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await User.findByPk(id, { include: [Advertisement, Message, Token] });
+            if (!user) {
+                return res.status(404).json({ message: "Користувача не знайдено" });
+            }
+            return res.status(200).json({ message: "Користувача знайдено", data: user });
+        }
+        catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Помилка отримання користувача" });
+        }
+    }
+    static async updateUser(req, res) {
+        try {
+            const { id } = req.params;
+            const { login, email, password, phone } = req.body;
+            const user = await User.findByPk(id);
+            if (!user) {
+                return res.status(404).json({ message: "Користувача не знайдено" });
+            }
+            const salt = bcrypt.genSaltSync(10);
+            const hash = await bcrypt.hash(password, salt);
+            user.login = login || user.login;
+            user.email = email || user.email;
+            user.password = hash || user.password;
+            user.phone = phone || user.phone;
+            await user.save();
+            return res.status(200).json({ message: "Користувача оновлено", data: user });
+        }
+        catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Помилка оновлення користувача" });
+        }
+    }
+    static async deleteUser(req, res) {
+        try {
+            const { id } = req.params;
+            const user = await User.findByPk(id);
+            if (!user) {
+                return res.status(404).json({ message: "Користувача не знайдено" });
+            }
+            await user.destroy();
+            return res.status(200).json({ message: "Користувача видалено" });
+        }
+        catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Помилка видалення користувача" });
         }
     }
 }

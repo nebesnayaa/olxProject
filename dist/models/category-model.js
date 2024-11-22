@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { Table, Model, Column, DataType, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 let Category = class Category extends Model {
 };
 __decorate([
@@ -25,12 +25,15 @@ __decorate([
     ForeignKey(() => Category),
     Column({
         type: DataType.INTEGER,
-        allowNull: false
+        allowNull: true,
     })
 ], Category.prototype, "parent_id", void 0);
 __decorate([
-    BelongsTo(() => Category)
-], Category.prototype, "category", void 0);
+    BelongsTo(() => Category, { as: "parentCategory", foreignKey: "parent_id" })
+], Category.prototype, "parentCategory", void 0);
+__decorate([
+    HasMany(() => Category, { as: "subcategories", foreignKey: "parent_id" })
+], Category.prototype, "subcategories", void 0);
 __decorate([
     HasMany(() => Advertisement)
 ], Category.prototype, "advertisements", void 0);

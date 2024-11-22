@@ -1,5 +1,5 @@
 import { Table, Model, Column, DataType, ForeignKey, BelongsTo, HasMany } from "sequelize-typescript";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 
 @Table ({
   tableName: "photos",

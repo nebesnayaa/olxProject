@@ -1,5 +1,5 @@
 import { Table, Model, Column, DataType, HasMany, HasOne} from "sequelize-typescript";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 import { Token } from "./token-model.js";
 import { Message } from "./message-model.js";
 

@@ -1,6 +1,6 @@
 import { Table, Model, Column, ForeignKey, BelongsTo, DataType, HasOne, HasMany } from "sequelize-typescript";
 import { User } from "./user-model.js";
-import { Advertisement } from "./ad-model.js";
+import { Advertisement } from "./advert-model.js";
 
 @Table({
   tableName: "messages",
@@ -22,10 +22,11 @@ export class Message extends Model{
   content!: string;
 
   @Column({
-    type: DataType.TIME,
-    allowNull: false
+    type: DataType.DATE,
+    allowNull: false,
+    defaultValue: DataType.NOW
   })
-  timestamp!: string;
+  timestamp!: Date;
 
   @ForeignKey(() => Advertisement)
   @Column({

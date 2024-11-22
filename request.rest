@@ -1,14 +1,140 @@
+### USERS 
+
 GET http://localhost:3000/user HTTP/1.1
 ###
 
-POST http://localhost:3000/user/register HTTP/1.1
+GET http://localhost:3000/user/1 HTTP/1.1
+###
+
+PUT http://localhost:3000/user/1 HTTP/1.1
 content-type: application/json
 
 {
   "login": "AdminPro",
   "email": "admin@gmail.com",
   "password": "qwerty",
-  "phone": "0631253464"
+  "phone": "0681234100"
 }
+###
 
+POST http://localhost:3000/user/register HTTP/1.1
+content-type: application/json
+
+{
+  "login": "Max",
+  "email": "m123@gmail.com",
+  "password": "123456",
+  "confirm_password": "123456",
+  "phone": "0631253492"
+}
+###
+
+DELETE http://localhost:3000/user/3 HTTP/1.1
+###
+
+### CATEGORIES
+
+GET http://localhost:3000/category HTTP/1.1
+###
+
+GET http://localhost:3000/category/15 HTTP/1.1
+###
+
+PUT http://localhost:3000/category/9 HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Будівельні матеріали",
+  "parent_id": 1
+}
+###
+
+DELETE http://localhost:3000/category/34 HTTP/1.1
+###
+
+POST http://localhost:3000/category HTTP/1.1
+content-type: application/json
+
+{
+  "name": "Масажери",
+  "parent_id": 6
+}
+###
+
+### ADVERTISEMENTS
+
+GET http://localhost:3000/advert HTTP/1.1
+###
+
+GET http://localhost:3000/advert/4 HTTP/1.1
+###
+
+GET http://localhost:3000/advert/4/messages HTTP/1.1
+###
+
+PUT http://localhost:3000/advert/4 HTTP/1.1
+content-type: application/json
+
+{
+  "price": 100
+}
+###
+
+DELETE http://localhost:3000/advert/2 HTTP/1.1
+###
+
+POST http://localhost:3000/advert HTTP/1.1
+content-type: application/json
+
+{
+  "title": "Акваріумні рибки ",
+  "description": "GAN, в ідеальному стані",
+  "price": 600,
+  "user_id": 2,
+  "category_id": 24 
+}
+###
+
+### PHOTOS
+
+GET http://localhost:3000/photo/4 HTTP/1.1
+###
+
+POST http://localhost:3000/photo HTTP/1.1
+content-type: application/json
+
+{
+  "filepath": "images/photos/doll.jpg",
+  "ad_id": 4
+}
+###
+
+DELETE http://localhost:3000/photo/2 HTTP/1.1
+###
+
+### MESSAGES
+
+GET http://localhost:3000/message/1 HTTP/1.1
+###
+
+POST http://localhost:3000/message HTTP/1.1
+content-type: application/json
+
+{
+  "content": "Надішлять дані для відправки",
+  "ad_id": 4,
+  "sender_id": 1,
+  "receiver_id": 2
+}
+###
+
+PUT http://localhost:3000/message/2 HTTP/1.1
+content-type: application/json
+
+{
+  "content": "Надішліть дані для відправки"
+}
+###
+
+DELETE http://localhost:3000/message/2 HTTP/1.1
 ###
