@@ -3,6 +3,14 @@ import { Category } from "../models/category-model.js";
 import { User } from "../models/user-model.js";
 import { Photo } from "../models/photo-model.js";
 export class AdvertController {
+    // static async readAll(req: Request, res: Response): Promise<any> {
+    //   const advertsFromRedis = await clientRedis.get("adverts");
+    //   if (advertsFromRedis) {
+    //     console.log("Reading redis...");
+    //     return res.status(200).json({ message: "List of adverts", data: JSON.parse(advertsFromRedis)});
+    //   } 
+    //   return res.status(500).json({ message: "Db Error", data: null });
+    // }
     static async readAll(req, res) {
         try {
             const adverts = await Advertisement.findAll({ include: [User, Category] });
@@ -18,6 +26,21 @@ export class AdvertController {
             return res.status(500).json({ message: "Db Error", data: null });
         }
     }
+    // static async createAdvert(
+    //   req: Request<{}, {}, {
+    //           title: string; 
+    //           description: string; 
+    //           price: number;
+    //           user_id: number;
+    //           category_id: number}>, 
+    //   res: Response
+    // ): Promise<any> {
+    //   const newAdvert = await Advertisement.create({...req.body});
+    //   if (newAdvert) {
+    //     return res.status(201).json({ message: "Оголошення створено",  data: newAdvert });
+    //   } 
+    //   return res.status(500).json({ message: "Помилка створення оголошення", data: null });
+    // }
     static async createAdvert(req, res) {
         try {
             const { title, description, price, user_id, category_id } = req.body;
