@@ -2,7 +2,26 @@ import { Advertisement } from "../models/advert-model.js";
 import { Category } from "../models/category-model.js";
 import { User } from "../models/user-model.js";
 import { Photo } from "../models/photo-model.js";
+import { Op } from "sequelize";
 export class AdvertController {
+    static async readAll(req, res) {
+        try {
+            const adverts = await Advertisement.findAll({
+                include: [User, Category],
+                order: [["created_at", "DESC"]],
+            });
+            if (adverts) {
+                return adverts;
+            }
+            else {
+                return res.status(200).send({ message: "Оголошень немає" });
+            }
+        }
+        catch (error) {
+            console.error("Error rendering advertisements:", error);
+            return res.status(500).json({ message: "Db Error", data: null });
+        }
+    }
     // static async readAll(req: Request, res: Response): Promise<any> {
     //   const advertsFromRedis = await clientRedis.get("adverts");
     //   if (advertsFromRedis) {
@@ -11,21 +30,6 @@ export class AdvertController {
     //   } 
     //   return res.status(500).json({ message: "Db Error", data: null });
     // }
-    static async readAll(req, res) {
-        try {
-            const adverts = await Advertisement.findAll({ include: [User, Category] });
-            if (adverts) {
-                return res.status(200).json({ message: "List of adverts", data: adverts });
-            }
-            else {
-                return res.status(200).json({ message: "Оголошень немає" });
-            }
-        }
-        catch (error) {
-            console.error(error);
-            return res.status(500).json({ message: "Db Error", data: null });
-        }
-    }
     // static async createAdvert(
     //   req: Request<{}, {}, {
     //           title: string; 
@@ -108,4 +112,50 @@ export class AdvertController {
             return res.status(500).json({ message: "Помилка видалення оголошення" });
         }
     }
+    static async search(req, res) {
+        try {
+            const { query, minPrice, maxPrice, sortBy } = req.query;
+            console.log(req.query);
+            let filters = {};
+            if (query)
+                filters.title = { [Op.like]: `%${query}%` };
+            if (minPrice)
+                filters.price = { ...filters.price, [Op.gte]: Number(minPrice) };
+            if (maxPrice)
+                filters.price = { ...filters.price, [Op.lte]: Number(maxPrice) };
+            let order = [];
+            switch (sortBy) {
+                case "created_at_desc":
+                    order = [["created_at", "DESC"]];
+                    break;
+                case "created_at_asc":
+                    order = [["created_at", "ASC"]];
+                    break;
+                case "price_desc":
+                    order = [["price", "DESC"]];
+                    break;
+                case "price_asc":
+                    order = [["price", "ASC"]];
+                    break;
+                default:
+                    order = [["created_at", "DESC"]]; // За замовчуванням сортування за датою
+            }
+            const advertisements = await Advertisement.findAll({
+                where: filters,
+                order: order,
+                include: [User, Category],
+            });
+            if (advertisements) {
+                return advertisements;
+            }
+            else {
+                return res.status(200).json({ message: "Оголошень немає" });
+            }
+        }
+        catch (error) {
+            console.error(error);
+            return res.status(500).json({ message: "Db Error", data: null });
+        }
+    }
+    ;
 }

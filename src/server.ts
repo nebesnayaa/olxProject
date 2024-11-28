@@ -17,10 +17,10 @@ const PORT = process.env.PORT || 3000;
 const upload = multer();
 
 const run = async () => {
-  await connection.sync({ force: true });
+  await connection.sync();
   console.log("DB connection successful");
-  await clientRedis.connect();
-  console.log("Redis connection successful");
+  // await clientRedis.connect();
+  // console.log("Redis connection successful");
 
   //#region options for hbs
   const hbs = exphbs.create({

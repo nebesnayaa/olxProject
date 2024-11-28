@@ -3,7 +3,6 @@ import exphbs, { engine } from "express-handlebars";
 import cookieParser from "cookie-parser";
 import path from "node:path";
 import multer from "multer";
-import { clientRedis } from "./config/redis-config.js";
 import { connection } from "./config/config.js";
 import { userRoutes } from "./routes/user-routes.js";
 import siteRoutes from "./routes/site-routes.js";
@@ -15,10 +14,10 @@ import { messageRoutes } from "./routes/message-routes.js";
 const PORT = process.env.PORT || 3000;
 const upload = multer();
 const run = async () => {
-    await connection.sync({ force: true });
+    await connection.sync();
     console.log("DB connection successful");
-    await clientRedis.connect();
-    console.log("Redis connection successful");
+    // await clientRedis.connect();
+    // console.log("Redis connection successful");
     //#region options for hbs
     const hbs = exphbs.create({
         defaultLayout: "main",

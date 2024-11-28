@@ -1,11 +1,11 @@
-<nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
+<nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
+  <div class="container-fluid d-flex align-items-center">
     <a class="navbar-brand" href="/">OLX</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+    <div class="collapse navbar-collapse d-flex align-items-center" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-lg-0">
         
         {{#if user}}
           <li class="nav-item">
@@ -26,8 +26,30 @@
           </li>
         {{/if}}
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <form id="searchForm" class="form-search d-flex align-items-center m-0" role="search" action="/advert/search" method="GET">
+        <div>
+          <select class="selectField form-select" name="sortBy">
+            <option value="created_at_desc">За датою (спочатку нові)</option>
+            <option value="created_at_asc">За датою (спочатку старі)</option>
+            <option value="price_desc">За ціною (від найвищої)</option>
+            <option value="price_asc">За ціною (від найнижчої)</option>
+          </select>
+
+          <div class="d-flex">
+            <div class="priceField input-group">
+              <span class="input-group-text">₴</span>
+              <input type="number" class="form-control" name="minPrice" placeholder="Від" value="{{minPrice}}">
+            </div>
+            
+            <div class="priceField input-group">
+              <span class="input-group-text">₴</span>
+              <input type="number" class="form-control" name="maxPrice" placeholder="До" value="{{maxPrice}}">
+            </div>
+          </div>
+        </div>
+
+        <input class="searchField form-control ms-3" type="search" name="query" placeholder="Пошук..."  value="{{query}}" aria-label="Search">
+        
         <button class="btn btn-outline-success" type="submit">Пошук</button>
       </form>
     </div>

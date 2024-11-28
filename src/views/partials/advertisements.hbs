@@ -1,0 +1,26 @@
+<div class="container my-5">
+    <div class="row">
+      {{#each advertisements}}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <img
+            src="{{#if this.photos.[0]}}{{this.photos.[0].filepath}}{{else}}/placeholder.jpg{{/if}}"
+            class="card-img-top"
+            alt="{{this.title}}"
+          />
+          <div class="card-body">
+            <h5 class="card-title">{{this.title}}</h5>
+            <p class="card-text">{{this.description}}</p>
+            <p class="card-text">
+              <strong>Ціна:</strong> {{this.price}} грн
+            </p>
+            <p class="card-text">
+              <strong>Категорія:</strong> {{this.category.name}}
+            </p>
+            <a href="/advert/{{this.id}}" class="btn btn-primary">Переглянути</a>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+  </div>

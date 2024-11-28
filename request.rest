@@ -56,8 +56,8 @@ POST http://localhost:3000/category HTTP/1.1
 content-type: application/json
 
 {
-  "name": "Масажери",
-  "parent_id": 6
+  "name": "Побутова техніка",
+  "parent_id": 5
 }
 ###
 
@@ -66,10 +66,13 @@ content-type: application/json
 GET http://localhost:3000/advert HTTP/1.1
 ###
 
+GET http://localhost:3000/advert/search HTTP/1.1
+###
+
 GET http://localhost:3000/advert/4 HTTP/1.1
 ###
 
-GET http://localhost:3000/advert/4/messages HTTP/1.1
+GET http://localhost:3000/advert/1/messages HTTP/1.1
 ###
 
 PUT http://localhost:3000/advert/4 HTTP/1.1
@@ -87,13 +90,14 @@ POST http://localhost:3000/advert HTTP/1.1
 content-type: application/json
 
 {
-  "title": "Акваріумні рибки ",
-  "description": "GAN, в ідеальному стані",
-  "price": 600,
-  "user_id": 2,
-  "category_id": 24 
+  "title": "Холодильник",
+  "description": "10 років",
+  "price": 4000,
+  "user_id": 1,
+  "category_id": 7 
 }
 ###
+
 
 ### PHOTOS
 
@@ -121,8 +125,8 @@ POST http://localhost:3000/message HTTP/1.1
 content-type: application/json
 
 {
-  "content": "Надішліть дані для відправки",
-  "ad_id": 4,
+  "content": "Добре, дякую",
+  "ad_id": 1,
   "sender_id": 1,
   "receiver_id": 2
 }

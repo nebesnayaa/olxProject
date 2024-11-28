@@ -10,6 +10,15 @@ categoryRoutes
 
 categoryRoutes
   .route("/:id")
-  .get(CategoryController.readById)
+  .get(async (req, res) => {
+    try {
+      const advertisements = await CategoryController.readById(req, res);
+  
+      res.render("partials/advertisements", { advertisements });
+    } catch (error) {
+      console.error("Error loading home page:", error);
+      res.status(500).send("Помилка при завантаженні головної сторінки");
+    }
+  }) 
   .put(CategoryController.updateCategory)
   .delete(CategoryController.deleteCategory);

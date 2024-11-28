@@ -1,5 +1,7 @@
 import { Request, Response,  } from "express";
 import { Category } from "../models/category-model.js";
+import { Advertisement } from "../models/advert-model.js";
+import { User } from "../models/user-model.js";
 
 
 export class CategoryController{
@@ -11,7 +13,7 @@ export class CategoryController{
       });
  
       if (categories) {
-        return res.render("categories", { categories });
+        return categories;
       }
     } catch (error) {
       console.error(error);
@@ -85,12 +87,15 @@ export class CategoryController{
       const category = await Category.findByPk(id, {
         include: [{ model: Category, as: "subcategories" }],
       });
-
       if (!category) {
         return res.status(404).json({ message: "Категорію не знайдено" });
       }
-
-      return res.status(200).json({ message: "Категорію знайдено", data: category });
+      const adverts = await Advertisement.findAll({ 
+        where: { category_id: category.id },
+        include: [User, Category],
+        order: [["created_at", "DESC"]],
+      });
+      return adverts;
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Помилка отримання категорії" });
