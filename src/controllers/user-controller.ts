@@ -79,15 +79,14 @@ export class UserController {
   static async login(req: Request, res: Response): Promise<any> {
     try {
       const { email, password } = req.body;
-      console.log(req.body);
+      
       const user = await User.findOne({ where: { email } });
 
       if (!user) return res.status(400).json({ message: "Юзера з таким email не знайдено" });
 
       const passwordMatch = await bcrypt.compare(password, user.password);
       if (!passwordMatch) return res.status(400).json({ message: "Неправильний пароль" });
-      res.locals.user = user.login;
-
+      
       await TokenController.generateToken(user, res);
       
       res.status(200).redirect("/");

@@ -6,14 +6,14 @@ GET http://localhost:3000/user HTTP/1.1
 GET http://localhost:3000/user/1 HTTP/1.1
 ###
 
-PUT http://localhost:3000/user/1 HTTP/1.1
+PUT http://localhost:3000/user/2 HTTP/1.1
 content-type: application/json
 
 {
-  "login": "AdminPro",
-  "email": "admin@gmail.com",
-  "password": "qwerty",
-  "phone": "0681234100"
+  "login": "Max",
+  "email": "m123@gmail.com",
+  "password": "123456",
+  "phone": "0681234101"
 }
 ###
 
@@ -21,15 +21,15 @@ POST http://localhost:3000/user/register HTTP/1.1
 content-type: application/json
 
 {
-  "login": "Max",
-  "email": "m123@gmail.com",
-  "password": "123456",
-  "confirm_password": "123456",
-  "phone": "0631253492"
+  "login": "Admin",
+  "email": "admin@gmail.com",
+  "password": "qwerty",
+  "confirm_password": "qwerty",
+  "phone": "0681234100"
 }
 ###
 
-DELETE http://localhost:3000/user/4 HTTP/1.1
+DELETE http://localhost:3000/user/1 HTTP/1.1
 ###
 
 ### CATEGORIES
@@ -69,7 +69,7 @@ GET http://localhost:3000/advert HTTP/1.1
 GET http://localhost:3000/advert/search HTTP/1.1
 ###
 
-GET http://localhost:3000/advert/4 HTTP/1.1
+GET http://localhost:3000/advert/1 HTTP/1.1
 ###
 
 GET http://localhost:3000/advert/1/messages HTTP/1.1
@@ -108,12 +108,12 @@ POST http://localhost:3000/photo HTTP/1.1
 content-type: application/json
 
 {
-  "filepath": "images/photos/doll.jpg",
+  "filepath": "images/photos/pic2.jpg",
   "ad_id": 4
 }
 ###
 
-DELETE http://localhost:3000/photo/2 HTTP/1.1
+DELETE http://localhost:3000/photo/4 HTTP/1.1
 ###
 
 ### MESSAGES
@@ -141,4 +141,41 @@ content-type: application/json
 ###
 
 DELETE http://localhost:3000/message/2 HTTP/1.1
+###
+
+### ADMIN
+GET http://localhost:3000/admin/users HTTP/1.1
+###
+
+PUT http://localhost:3000/admin/advert/1 HTTP/1.1
+content-type: application/json
+
+{
+  "status": "false"
+}
+###
+
+POST http://localhost:3000/admin/user HTTP/1.1
+content-type: application/json
+
+{
+  "login": "NewUser",
+  "email": "new@gmail.com",
+  "password": "123456",
+  "role": "USER",
+  "phone": "0681232456"
+}
+###
+
+PUT http://localhost:3000/admin/user/2 HTTP/1.1
+content-type: application/json
+
+{
+  "login": "Max",
+  "email": "m123@gmail.com",
+  "password": "123456",
+  "role": "USER",
+  "phone": "0681234101",
+  "status": "true"
+}
 ###
